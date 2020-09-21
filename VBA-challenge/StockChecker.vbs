@@ -1,52 +1,76 @@
 Sub StockChecker():
 
-'assign variables
-Dim ticker As Script
-Dim open_price As Double
-Dim close_price As Double
-Dim volume As Long
-Dim Dollar_change As Double
-Dim Percent_change As Double
+    'assign variables
+    Dim ticker As String
+    Dim Summary_Table As Integer   
+    Dim open_price As Currency
+    Dim close_price As Currency
+    Dim volume As Double
+    Dim Dollar_change As Currency
+    Dim Percent_change As Double
 
-'assign headers
-Cells(1, 8).Value = "<ticker>"
-Cells(1, 9).Value = "<yearly_change>"
-Cells(1, 10).Value = "<percent_change>"
-Cells(1, 11).Value = "<volume>"
+    'assign headers
+    Cells(1, 8).Value = "<ticker>"
+    Cells(1, 9).Value = "<yearly_change>"
+    Cells(1, 10).Value = "<percent_change>"
+    Cells(1, 11).Value = "<volume>"
 
-'find last row
-lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+    'find last row
+    lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+
+    'set summary table Row
+    Summary_Table = 2
 
 'loop through ticker symbols
 For i = 2 To lastrow
 
-'set volume to 0
-volume = 0
+    'Loop through stock ticker symbols
+    If Cells(i, 1).Value <> Cells(i - 1, 1).Value Then
+    
+        'set ticker symbol
+        ticker = Cells(i, 1).Value
 
-If Cells(i, 1).Value <> Cells(i - 1, 1).Value Then
-    ticker = Cells(i, 1).Value
-    open_price = Cells(i, 3).Value
-    volume = Cells(i, 7).Value
+        'set open price
+        open_price = Cells(i, 3).Value
 
-    If Cells(i, 1).Value = Cells(i - 1, 1).Value Then
-    volume = Cells(i, 7).Value + volume
+        'add to volume
+        volume = Cells(i, 7).Value
 
-        If Cells(i, 1).Value <> Cells(i + 1, 1).Value Then
+        'Put stocker ticker in Summary Table 
+        Range("H" & Summary_Table).Value = ticker
+
+   'check if that is the last ticker and calculate price change
+    ElseIf Cells(i, 1).Value <> Cells(i + 1, 1).Value Then
+
+        'set close price
         close_price = Cells(i, 6)
-        Dollar_change = open_price - close_price
-        Percent_change = Dollar_change / open_price
+
+        'calculate dollar change and percent change
+        Dollar_change = (open_price - close_price)
+        Percent_change = (Dollar_change / open_price)
+
+        'calculate volume
+        volume = volume + Cells(i, 7).Value
+
+        'assign values to summary table
+        Range("I" & Summary_Table).Value = Dollar_change
+        Range("J" & Summary_Table).Value = Percent_change
+        Range("K" & Summary_Table).Value = volume
+
+        'add row to summary table 
+        Summary_Table = Summary_Table + 1
+            
+    'reset volume to zero
+    volume = 0
+
+    'check if ticker is the same and add to volume
+    Else
+        volume = volume + Cells(i, 7).Value
 
     End If
-
-    For j = 2 To 50
-
-    Cells(j, 8).Value = ticker
-    Cells(j, 9).Value = Dollar_change
-    Cells(j, 10).Value = Percent_change
-    Cells(j, 11).Value = volume
-
-    Next j
 
 Next i
 
 End Sub
+
+
