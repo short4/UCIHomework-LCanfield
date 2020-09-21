@@ -45,16 +45,34 @@ For i = 2 To lastrow
         'set close price
         close_price = Cells(i, 6)
 
-        'calculate dollar change and percent change
+        'calculate dollar change and percent change 
         Dollar_change = (open_price - close_price)
         Percent_change = (Dollar_change / open_price)
 
         'calculate volume
         volume = volume + Cells(i, 7).Value
 
-        'assign values to summary table
+        'assign dollar values to summary table and color
         Range("I" & Summary_Table).Value = Dollar_change
+        If Dollar_change < 0 Then
+            Cells(Summary_Table,9).Interior.ColorIndex = 3
+
+        Else
+            Cells(Summary_Table,9).Interior.ColorIndex = 4
+        
+        End if 
+
+        'assign percent change to summary table and color
         Range("J" & Summary_Table).Value = Percent_change
+        If Percent_change < 0 Then
+            Cells(Summary_Table,10).Interior.ColorIndex = 3
+
+        Else
+            Cells(Summary_Table,10).Interior.ColorIndex = 4
+        
+        End if 
+
+        'assign volume to summary table 
         Range("K" & Summary_Table).Value = volume
 
         'add row to summary table 
