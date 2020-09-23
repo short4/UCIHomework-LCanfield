@@ -2,7 +2,7 @@ Sub StockChecker():
 
     'assign variables
     Dim ticker As String
-    Dim Summary_Table As Integer   
+    Dim Summary_Table As Integer
     Dim open_price As Currency
     Dim close_price As Currency
     Dim volume As Double
@@ -36,7 +36,7 @@ For i = 2 To lastrow
         'add to volume
         volume = Cells(i, 7).Value
 
-        'Put stocker ticker in Summary Table 
+        'Put stocker ticker in Summary Table
         Range("H" & Summary_Table).Value = ticker
 
    'check if that is the last ticker and calculate price change
@@ -45,37 +45,45 @@ For i = 2 To lastrow
         'set close price
         close_price = Cells(i, 6)
 
-        'calculate dollar change and percent change 
+        'calculate dollar change and percent change
         Dollar_change = (open_price - close_price)
-        Percent_change = (Dollar_change / open_price)
 
+        If open_price = 0 Then
+            Percent_change = "0"
+        
+        Else
+            Percent_change = (Dollar_change / open_price)
+
+        End If
+        
         'calculate volume
         volume = volume + Cells(i, 7).Value
 
         'assign dollar values to summary table and color
         Range("I" & Summary_Table).Value = Dollar_change
         If Dollar_change < 0 Then
-            Cells(Summary_Table,9).Interior.ColorIndex = 3
+            Cells(Summary_Table, 9).Interior.ColorIndex = 3
 
         Else
-            Cells(Summary_Table,9).Interior.ColorIndex = 4
+            Cells(Summary_Table, 9).Interior.ColorIndex = 4
         
-        End if 
+        End If
 
         'assign percent change to summary table and color
+        Range("J" & Summary_Table).NumberFormat = "0.00%"
         Range("J" & Summary_Table).Value = Percent_change
         If Percent_change < 0 Then
-            Cells(Summary_Table,10).Interior.ColorIndex = 3
+            Cells(Summary_Table, 10).Interior.ColorIndex = 3
 
         Else
-            Cells(Summary_Table,10).Interior.ColorIndex = 4
+            Cells(Summary_Table, 10).Interior.ColorIndex = 4
         
-        End if 
+        End If
 
-        'assign volume to summary table 
+        'assign volume to summary table
         Range("K" & Summary_Table).Value = volume
 
-        'add row to summary table 
+        'add row to summary table
         Summary_Table = Summary_Table + 1
             
     'reset volume to zero
@@ -90,5 +98,6 @@ For i = 2 To lastrow
 Next i
 
 End Sub
+
 
 
