@@ -7,8 +7,6 @@ bank_data = os.path.join('..', 'Resources','budget_data.csv')
 months = 0
 total_profits = 0
 profit_change = 0
-profit_change1 = 0
-profit_change2 = 0
 change_pl = []
 profit_list = []
 average_change = 0
@@ -35,7 +33,7 @@ with open(bank_data) as csvfile:
     for row in csvreader:
         months = months + 1
         total_profits = round(total_profits + float(row[1]))
-        #profit_change = (row[1]) - (1 - row[1])
+        #profit_change = sum(int(row[1]) - int(1 - row[1]))
         change_pl.append(profit_change)
         average_change = float(profit_change) / months
         average_list.append(average_change)
