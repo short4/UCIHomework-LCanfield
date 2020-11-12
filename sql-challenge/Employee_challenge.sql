@@ -4,21 +4,11 @@ FROM employees, salaries
 WHERE employees.employee_id = salaries.employee_id;
 
 -- select employees hired in 1986
+SELECT first_name, last_name, hire_date
+FROM employees
+WHERE hire_date BETWEEN '1986-01-01' AND '1986-12-31';
+ 
 
--- SELECT first_name, last_name, hire_date
--- TO_CHAR(hire_date, YYYY)
--- WHERE hire_date = '1986%'
--- FROM employees;
-
-
--- SELECT first_name, last_name, date_part('year', hire_date) AS "year"
--- FROM employees
--- WHERE hire_date = '1986';
-
-
--- EXTRACT (YEAR FROM hire_date) AS YEAR
--- WHERE hire_date = '1986'
--- FROM employees;
 
 --Manager of each department with dept name and employee information
 SELECT dept_manager.dept_no, departments.dept_name, employees.employee_id, employees.first_name, employees.last_name 
