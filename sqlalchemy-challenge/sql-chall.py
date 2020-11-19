@@ -18,7 +18,6 @@ Base.prepare(engine, reflect=True)
 measurement = Base.classes.measurement
 
 #Flask
-
 app = Flask(__name__)
 
 # Home 
@@ -26,14 +25,14 @@ app = Flask(__name__)
 def home():
     #List available Routes 
     return (
-        f"Welcome to my Climate app" + "<br/>" +
+        f"Hawaii Climate app" + "<br/>" +
         "<hr>" +
         f"Available Routes:" + "<br/>" +
         "<hr>" +
-        f"/api/v1.0/precipitation" +
-        f"/api/v1.0/stations" +
-        f"/api/v1.0/tobs" +
-        f"/api/v1.0/<start>" +
+        f"/api/v1.0/precipitation" + "<br/>"
+        f"/api/v1.0/stations" + "<br/>"
+        f"/api/v1.0/tobs" + "<br/>"
+        f"/api/v1.0/<start>" + "<br/>"
         f"/api/v1.0/<start>/<end>"
     )
 
@@ -41,12 +40,8 @@ def home():
 def precipitation():
 
     session = Session(engine)
-
     results = session.query(measurement.date, measurement.prcp).all()
-    
     session.close()
-    # print(results)
-    # return jsonify(results)
     
     prcp = {}
     for t in results:
@@ -54,15 +49,42 @@ def precipitation():
     return jsonify(prcp)
 
 
-    # print(f"Welcome to my Climate app")<br/>
-    # <hr>
-    # print(f"Available Routes:")<br/>
-    # <hr>
-    # print(f"/api/v1.0/precipitation")
-    # print(f"/api/v1.0/stations")
-    # print("/api/v1.0/tobs")
-    # )
+@app.route("/api/v1.0/stations")
+def stations():
 
+    session = Session(engine)
+    results = session.query(measurement.date, measurement.station).all()
+    session.close()
+
+    station = {}
+    for t in results:
+        station[t[0]] = t[1]
+    return jsonify(station)
+
+@app.route("/api/v1.0/tobs")
+def tobs():
+
+    session = Session(engine)
+    results = session.query(measurement.date, measurement.tobs).all()
+    session.close()
+    
+    tobs = {}
+    for t in results:
+        tobs[t[0]] = t[1]
+    return jsonify(tobs)
+
+@app.route("/api/v1.0/<start>" )
+def start():
+
+    session = Session(engine)
+    results = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).all()
+    session.close()
+
+    
+    start = {}
+    for t in results:
+        tobs[t[0]] = t[1]
+    return jsonify(tobs)
 
 if __name__ == "__main__":
     app.run(debug=True)
