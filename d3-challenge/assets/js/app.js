@@ -30,24 +30,14 @@ d3.csv("assets/data/data.csv").then(function(healthData){
         data.state = data.state;
         data.abbr = data.abbr;
         data.poverty = +data.poverty;
-        data.povertyMoe = +data.povertyMoe;
-        data.age = +data.age;
-        data.ageMoe = +data.ageMoe;
-        data.incomeMoe = +data.incomeMoe;
-        data.healthcare = +data.healthcare;
-        data.healthcareLow = +data.healthcareLow;
-        data.healthcareHigh = +data.healthcareHigh;
         data.obesity = +data.obesity;
         data.obesityLow = +data.obesityLow;
         data.obesityHigh = +data.obesityHigh;
-        data.smokes = +data.smokes;
-        data.smokesLow = +data.smokesLow;
-        data.smokesHigh = +data.smokesHigh;
     });
     
     //create scales
     var xLinearScale = d3.scaleLinear()
-        .domain([5, d3.max(healthData, d => d.smokes + 5)])
+        .domain([20, d3.max(healthData, d => d.obesity + 2)])
         .range([0, width]);
     
     var yLinearScale = d3.scaleLinear()
@@ -71,43 +61,48 @@ d3.csv("assets/data/data.csv").then(function(healthData){
     .data(healthData)
     .enter()
     .append("circle")
-    .attr("cx", d => xLinearScale(d.smokes))
+    .attr("cx", d => xLinearScale(d.obesity))
     .attr("cy", d => yLinearScale(d.poverty))
-    .attr("r", "10")
-    .attr("fill", "blue")
-    .attr("opacity", ".5");
+    .attr("r", "12")
+    .attr("class", "stateCircle");
 
-    // //abbr in circles
-    // var stateAbbr = chartGroup.append('g')
-    //     .selectAll("text")
-    //     .data(healthData)
-    //     .enter().append("text")
-    //     .attr('font-size', 6)
-    //     .attr("class", stateCircle)
-    //     .attr("dx", 5)
-    //     .attr("dy", 5)
-    //     .text(function(d){
-    //         return(`${d.abbr}`)
-    //     });
+
+    //abbr in circles
+    var stateAbbr = chartGroup.selectAll(null)
+        .data(healthData)
+        .enter().append("text");
+    
+    stateAbbr
+        .attr("x", function(d){
+            return xLinearScale(d.obesity);
+        })
+        .attr("y", function(d){
+            return yLinearScale(d.poverty)
+        })
+        .text(function(d){
+            return d.abbr;
+        })
+        .attr("class", "stateText")
+        .attr("font-size", "9px");
+
 
     //tooltip
     var toolTip = d3.tip()
         .attr("class", "d3-tip")
-        .attr("class", "stateCircle")
         .offset([0, 0])
         .html(function(d){
-            return (`${d.abbr}`);
+            return (`${d.state}`);
         });
     
     chartGroup.call(toolTip);
 
-    // circlesGroup.on("mouseover", function(data){
-    //     toolTip.show(data, this);
-    // })
-    // //mouseout
-    // .on("mouseout", function(data){
-    //     toolTip.hide(data);
-    // });
+    circlesGroup.on("mouseover", function(data){
+        toolTip.show(data, this);
+    })
+    //mouseout
+    .on("mouseout", function(data){
+        toolTip.hide(data);
+    });
 
     //axis labels
     chartGroup.append("text")
@@ -121,7 +116,7 @@ d3.csv("assets/data/data.csv").then(function(healthData){
     chartGroup.append("text")
         .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
         .attr("class", "aText")
-        .text("Number of Smokers");
+        .text("Obesity");
 }).catch(function(error){
     console.log(error);
 });
