@@ -8,22 +8,22 @@ d3.json(queryUrl, function(response) {
 });
 function createColors(depth){
   if (depth>90){
-    return "red"
+    return "darkred"
   }
   else if (depth >70){
-    return "orange"
+    return "red"
   }
   else if (depth >50){
-    return "orangeRed"
+    return "orange"
   }
   else if (depth >30){
     return "yellow"
   }
   else if (depth >10){
-    return "yellowGreen"
+    return "green"
   }
   else 
-    return "lightGreen"
+    return "lightgreen"
 };
 
 function createSize(magnitude){
@@ -83,9 +83,6 @@ function createMap(earthquakes){
     layers: [tileLayer, earthquakes]
   });
 
-  L.control.layers(overlayMap, {
-    collapsed: false
-  }).addTo(myMap);
 
   var legend = L.control({position: 'bottomright'});
 
@@ -107,44 +104,6 @@ legend.onAdd = function (map) {
 
 legend.addTo(myMap);
 
-//   var legend = L.control({position: 'bottomleft'});
-//   legend.onAdd = function () {
-//     var infoDiv = L.DomUtil.create('div', 'info legend'),
-//                   depth = [ '-10 to 10', '10 to 30', '30 to 50', '50 to 70', '70 to 90','>90'],
-//                   colors = [ "Green",
-//                   "greenyellow",
-//                   "Orange",
-//                   "OrangeRed",
-//                   "Red",
-//                   "Maroon"];
-//     infoDiv.innerHTML += '<div align= "center"><strong> Depth </strong></div> <br>'
-//     // loop through our density intervals and generate a label with a colored square for each interval
-//     for (var i = 0; i < depth.length; i++) {
-//         infoDiv.innerHTML +=
-//             '<i style="background:' + colors[i] + '"></i> ' +
-//             depth[i] + '<br>'+ '<br>';
-//     };
-//     return infoDiv;
-//  };
-//     legend.addTo(myMap);
-
-  // var legend = L.control({position: 'bottomleft'});
-
-  // legend.onAdd = function () {
-  
-  //     var div = L.DomUtil.create('div', 'info legend'),
-  //         depth = ["-10-10", "10-30", "30-50", "50-70", "70-90", "90+"],
-  //     colors = ["lightGreen", "yellowGreen", "yellow", "orangeRed", "orange", "red"];
-  
-  //     // loop through our density intervals and generate a label with a colored square for each interval
-  //     for (var i = 0; i < depth.length; i++) {
-  //         div.innerHTML +=
-  //             '<i style="background:' + colors[i] + '"></i> ' +
-  //             depth[i] + '<br>'; 
-  //     }
-  
-  //     return div;
-  // };
-  // legend.addTo(myMap);
+// 
 }
 
